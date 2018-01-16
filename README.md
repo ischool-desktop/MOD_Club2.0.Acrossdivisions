@@ -1,4 +1,4 @@
-MOD_Club.Volunteer.Acrossdivisions
+MOD_Club2.0.Acrossdivisions
 ==================================
 
-社團(志願序_跨部別外掛模組)
+社團2.0(跨部別外掛模組)
