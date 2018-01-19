@@ -43,5 +43,15 @@ namespace MOD_Club_Acrossdivisions
                 return FISCA.Permission.UserAcl.Current[社團概況表].Executable;
             }
         }
+
+        public static string 匯出選社結果 { get { return "MOD_Club_Acrossdivisions.ExportAcrossClubStudent"; } }
+        public static bool 匯出選社結果權限
+        {
+            get
+            {
+                return FISCA.Permission.UserAcl.Current[匯出選社結果].Executable;
+            }
+        }
+
     }
 }

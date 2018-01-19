@@ -138,6 +138,7 @@
     </Compile>
     <Compile Include="DataGridViewExport.cs" />
     <Compile Include="Def.cs" />
+    <Compile Include="ExportAcrossClubStudent.cs" />
     <Compile Include="Permissions.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -258,6 +259,7 @@
     <None Include="Resources\Report.png" />
     <None Include="Resources\asymmetric_network_64.png" />
     <None Include="Resources\flip_horizontal_64.png" />
+    <None Include="Resources\匯出選社結果%28跨部別%29_範本.xlsx" />
     <None Include="Resources\班級點名單_週報表樣式範本.doc" />
     <None Include="Resources\班級點名表_合併欄位總表.doc" />
     <None Include="Resources\社團參與證明單_英文_合併欄位總表.doc" />

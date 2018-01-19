@@ -77,15 +77,23 @@ namespace MOD_Club_Acrossdivisions
                 sot.ShowDialog();
             };
 
+            InClass2["報表"]["匯出選社結果(跨部別)"].Enable = Permissions.匯出選社結果權限;
+            InClass2["報表"]["匯出選社結果(跨部別)"].Click += delegate
+            {
+                ExportAcrossClubStudent ex = new ExportAcrossClubStudent();
+            };
+
             //是否能夠只用單一代碼,決定此模組之使用
             Catalog detail1;
             detail1 = RoleAclSource.Instance["社團"]["功能項目"];
             detail1.Add(new RibbonFeature(Permissions.連線, "連線_跨部別"));
             detail1.Add(new RibbonFeature(Permissions.社團志願分配, "社團志願分配_跨部別"));
+            
 
             detail1 = RoleAclSource.Instance["社團"]["報表"];
             detail1.Add(new RibbonFeature(Permissions.社團點名單, "社團點名單_跨部別"));
             detail1.Add(new RibbonFeature(Permissions.社團概況表, "社團概況表_跨部別"));
+            detail1.Add(new RibbonFeature(Permissions.匯出選社結果, "匯出選社結果_跨部別"));
         }
     }
 }
