@@ -223,8 +223,6 @@ namespace MOD_Club_Acrossdivisions
             PageOne.MailMerge.Execute(table);
             e.Result = PageOne;
 
-
-
         }
 
         void BGW_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -378,14 +376,14 @@ namespace MOD_Club_Acrossdivisions
         {
             SaveFileDialog sfd = new SaveFileDialog();
             sfd.Title = "另存新檔";
-            sfd.FileName = "班級點名表_合併欄位總表.doc";
+            sfd.FileName = "社團點名表_合併欄位總表.doc";
             sfd.Filter = "Word檔案 (*.doc)|*.doc|所有檔案 (*.*)|*.*";
             if (sfd.ShowDialog() == DialogResult.OK)
             {
                 try
                 {
                     FileStream fs = new FileStream(sfd.FileName, FileMode.Create);
-                    fs.Write(Properties.Resources.班級點名表_合併欄位總表, 0, Properties.Resources.班級點名表_合併欄位總表.Length);
+                    fs.Write(Properties.Resources.社團點名表_合併欄位總表, 0, Properties.Resources.社團點名表_合併欄位總表.Length);
                     fs.Close();
                     System.Diagnostics.Process.Start(sfd.FileName);
                 }

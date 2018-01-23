@@ -113,26 +113,6 @@ namespace MOD_Club_Acrossdivisions.Properties {
         /// <summary>
         ///   查詢類型 System.Byte[] 的當地語系化資源。
         /// </summary>
-        internal static byte[] 班級點名單_週報表樣式範本 {
-            get {
-                object obj = ResourceManager.GetObject("班級點名單_週報表樣式範本", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   查詢類型 System.Byte[] 的當地語系化資源。
-        /// </summary>
-        internal static byte[] 班級點名表_合併欄位總表 {
-            get {
-                object obj = ResourceManager.GetObject("班級點名表_合併欄位總表", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   查詢類型 System.Byte[] 的當地語系化資源。
-        /// </summary>
         internal static byte[] 社團參與證明單_英文_合併欄位總表 {
             get {
                 object obj = ResourceManager.GetObject("社團參與證明單_英文_合併欄位總表", resourceCulture);
@@ -166,6 +146,26 @@ namespace MOD_Club_Acrossdivisions.Properties {
         internal static byte[] 社團概況表_範本 {
             get {
                 object obj = ResourceManager.GetObject("社團概況表_範本", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類型 System.Byte[] 的當地語系化資源。
+        /// </summary>
+        internal static byte[] 社團點名單_週報表樣式範本 {
+            get {
+                object obj = ResourceManager.GetObject("社團點名單_週報表樣式範本", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類型 System.Byte[] 的當地語系化資源。
+        /// </summary>
+        internal static byte[] 社團點名表_合併欄位總表 {
+            get {
+                object obj = ResourceManager.GetObject("社團點名表_合併欄位總表", resourceCulture);
                 return ((byte[])(obj));
             }
         }

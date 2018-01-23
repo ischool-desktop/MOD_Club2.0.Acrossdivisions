@@ -141,7 +141,7 @@ namespace MOD_Club_Acrossdivisions
             tool._A.DeletedValues(delList);
             foreach (LoginSchool each in delList)
             {
-                sb.AppendLine("學校「" + each.School_Name + "」" + "備註「" + each.Remark + "」");
+                sb.AppendLine("學校「" + each.School_Name + "」" + "部別名稱「" + each.Remark + "」");
 
             }
 
@@ -160,7 +160,7 @@ namespace MOD_Club_Acrossdivisions
                     ls.Remark = "" + row.Cells[remake.Index].Value;
                     LoginSchoolList.Add(ls);
 
-                    sb.AppendLine("學校「" + ls.School_Name + "」" + "備註「" + ls.Remark + "」");
+                    sb.AppendLine("學校「" + ls.School_Name + "」" + "部別名稱「" + ls.Remark + "」");
                 }
             }
 

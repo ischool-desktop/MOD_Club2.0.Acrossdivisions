@@ -7,6 +7,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Aspose.Words;
+using System.IO;
+using System.Windows.Forms;
 
 namespace MOD_Club_Acrossdivisions
 {
@@ -80,7 +83,8 @@ namespace MOD_Club_Acrossdivisions
             InClass2["報表"]["匯出選社結果(跨部別)"].Enable = Permissions.匯出選社結果權限;
             InClass2["報表"]["匯出選社結果(跨部別)"].Click += delegate
             {
-                ExportAcrossClubStudent ex = new ExportAcrossClubStudent();
+                Ribbon.ExportAcrossDataForm ex = new Ribbon.ExportAcrossDataForm();
+                ex.ShowDialog();
             };
 
             //是否能夠只用單一代碼,決定此模組之使用

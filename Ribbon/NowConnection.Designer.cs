@@ -33,11 +33,11 @@
             this.btnSave = new DevComponents.DotNetBar.ButtonX();
             this.btnExit = new DevComponents.DotNetBar.ButtonX();
             this.dataGridViewX1 = new DevComponents.DotNetBar.Controls.DataGridViewX();
+            this.labelX1 = new DevComponents.DotNetBar.LabelX();
             this.SchoolDomain = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.remake = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColConnection = new DevComponents.DotNetBar.Controls.DataGridViewButtonXColumn();
             this.ColStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.labelX1 = new DevComponents.DotNetBar.LabelX();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewX1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -99,6 +99,23 @@
             this.dataGridViewX1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewX1_CellClick);
             this.dataGridViewX1.UserAddedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.dataGridViewX1_UserAddedRow);
             // 
+            // labelX1
+            // 
+            this.labelX1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.labelX1.AutoSize = true;
+            this.labelX1.BackColor = System.Drawing.Color.Transparent;
+            // 
+            // 
+            // 
+            this.labelX1.BackgroundStyle.Class = "";
+            this.labelX1.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.labelX1.Location = new System.Drawing.Point(9, 288);
+            this.labelX1.Name = "labelX1";
+            this.labelX1.Size = new System.Drawing.Size(443, 91);
+            this.labelX1.TabIndex = 1;
+            this.labelX1.Text = "1.請輸入連結學校Domain Name\r\n2.於學校建立您的登入帳號,按\"測試\"鈕\"成功\"後才可以正確儲存\r\n3.必須是ischool Account才可以進行" +
+    "連線\r\n4.所有欲分配的部別均需設定於畫面上(包含目前登入之部別)\r\n5.備註欄位,如連線之學校為為國中請輸入[國中部],如為高中請輸入[高中部]";
+            // 
             // SchoolDomain
             // 
             this.SchoolDomain.HeaderText = "學校位置";
@@ -107,7 +124,7 @@
             // 
             // remake
             // 
-            this.remake.HeaderText = "備註";
+            this.remake.HeaderText = "部別名稱";
             this.remake.Name = "remake";
             // 
             // ColConnection
@@ -127,23 +144,6 @@
             this.ColStatus.Name = "ColStatus";
             this.ColStatus.ReadOnly = true;
             this.ColStatus.Width = 150;
-            // 
-            // labelX1
-            // 
-            this.labelX1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.labelX1.AutoSize = true;
-            this.labelX1.BackColor = System.Drawing.Color.Transparent;
-            // 
-            // 
-            // 
-            this.labelX1.BackgroundStyle.Class = "";
-            this.labelX1.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX1.Location = new System.Drawing.Point(9, 288);
-            this.labelX1.Name = "labelX1";
-            this.labelX1.Size = new System.Drawing.Size(443, 91);
-            this.labelX1.TabIndex = 1;
-            this.labelX1.Text = "1.請輸入連結學校Domain Name\r\n2.於學校建立您的登入帳號,按\"測試\"鈕\"成功\"後才可以正確儲存\r\n3.必須是ischool Account才可以進行" +
-    "連線\r\n4.所有欲分配的部別均需設定於畫面上(包含目前登入之部別)\r\n5.備註欄位,如連線之學校為為國中請輸入[國中部],如為高中請輸入[高中部]";
             // 
             // NowConnection
             // 

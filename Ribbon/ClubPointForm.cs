@@ -18,11 +18,25 @@ using FISCA.DSAUtil;
 using K12.Data;
 using Aspose.Words;
 
+
 namespace MOD_Club_Acrossdivisions
 {
     public partial class ClubPointForm : BaseForm
     {
         BackgroundWorker BGW { get; set; }
+
+        // 部別名稱
+        string schoolMark = "";
+
+        Dictionary<string, OnlineMergerClub> Mergerdic = new Dictionary<string, OnlineMergerClub>();
+
+        /// <summary>
+        /// 連線後,Call Service 取得之學校相關內容
+        /// </summary>
+        Dictionary<string, AcrossRecord> SchoolClubDic { get; set; }
+
+        // 2018/01/22 羿均 新增日期設定檔
+        K12.Data.Configuration.ConfigData DateSetting = K12.Data.School.Configuration["AcrossDateSetting"];
 
         /// <summary>
         /// 可連線學校
@@ -37,14 +51,93 @@ namespace MOD_Club_Acrossdivisions
         public ClubPointForm()
         {
             InitializeComponent();
+            DateSetting.Save();
 
             BGW = new BackgroundWorker();
             BGW.RunWorkerCompleted += BGW_RunWorkerCompleted;
             BGW.DoWork += BGW_DoWork;
 
+            // 如果沒日期設定資料 
+            // DateTimeInput 預設為當天
+            // CheckBox 預設為勾選
+            if (string.IsNullOrEmpty(DateSetting["DateSetting"]))
+            {
+                dateTimeInput1.Value = DateTime.Today;
+                dateTimeInput2.Value = DateTime.Today.AddDays(6);
 
-            dateTimeInput1.Value = DateTime.Today;
-            dateTimeInput2.Value = DateTime.Today.AddDays(7);
+                GetDateTime_Click(null, null);
+                // 紀錄日期清單資料
+                string node = "";
+                foreach (DataGridViewRow dr in dataGridViewX1.Rows)
+                {
+                    node += "<Dgv date = \"" + dr.Cells["Column1"].Value + "\" week = \"" + dr.Cells["column2"].Value + "\"></Dgv>";
+                }
+
+                DateSetting["DateSetting"] = string.Format(@"<DateSetting><Weeks><Week name = ""Monday"" checked = ""true""/><Week name = ""Tuesday"" checked = ""true"" /><Week name = ""Wednesday"" checked = ""true"" /><Week name = ""Thursday"" checked = ""true"" /><Week name = ""Friday"" checked = ""true"" /><Week name = ""Saturday"" checked = ""true"" /><Week name = ""Sunday"" checked = ""true"" /></Weeks><StarDate Date = ""{0}"" ></StarDate><EndDate Date = ""{1}"" ></EndDate><DataGridView>{2}</DataGridView></DateSetting>"
+                , DateTime.Today, DateTime.Today.AddDays(6), node);
+                DateSetting.Save();
+                return;
+            }
+            // 如果有日期設定資料
+            if (DateSetting.Contains("DateSetting") && !string.IsNullOrEmpty(DateSetting["DateSetting"]))
+            {
+                XmlElement _DateSetting = K12.Data.XmlHelper.LoadXml(DateSetting["DateSetting"]);
+                XDocument _dateSetting = XDocument.Parse(_DateSetting.OuterXml);
+                // Init DateTimeInput
+                DateTime StarDate = DateTime.Parse(_dateSetting.Element("DateSetting").Element("StarDate").Attribute("Date").Value);
+                DateTime EndDate = DateTime.Parse(_dateSetting.Element("DateSetting").Element("EndDate").Attribute("Date").Value);
+                dateTimeInput1.Value = StarDate;
+                dateTimeInput2.Value = EndDate;
+                // Init CheckBox
+                List<XElement> Weeks = _dateSetting.Element("DateSetting").Element("Weeks").Elements("Week").ToList();
+                foreach (XElement week in Weeks)
+                {
+                    if (week.Attribute("name").Value == "Monday")
+                    {
+                        cbDay1.Checked = bool.Parse(week.Attribute("checked").Value);
+                    }
+                    if (week.Attribute("name").Value == "Tuesday")
+                    {
+                        cbDay2.Checked = bool.Parse(week.Attribute("checked").Value);
+                    }
+                    if (week.Attribute("name").Value == "Wednesday")
+                    {
+                        cbDay3.Checked = bool.Parse(week.Attribute("checked").Value);
+                    }
+                    if (week.Attribute("name").Value == "Thursday")
+                    {
+                        cbDay4.Checked = bool.Parse(week.Attribute("checked").Value);
+                    }
+                    if (week.Attribute("name").Value == "Friday")
+                    {
+                        cbDay5.Checked = bool.Parse(week.Attribute("checked").Value);
+                    }
+                    if (week.Attribute("name").Value == "Saturday")
+                    {
+                        cbDay6.Checked = bool.Parse(week.Attribute("checked").Value);
+                    }
+                    if (week.Attribute("name").Value == "Sunday")
+                    {
+                        cbDay7.Checked = bool.Parse(week.Attribute("checked").Value);
+                    }
+                }
+                // Init DataGridView
+                List<XElement> Dgv = _dateSetting.Element("DateSetting").Element("DataGridView").Elements("Dgv").ToList();
+                foreach (XElement dgvr in Dgv)
+                {
+                    DataGridViewRow dr = new DataGridViewRow();
+                    dr.CreateCells(dataGridViewX1);
+
+                    dr.Cells[0].Value = dgvr.Attribute("date").Value;
+                    dr.Cells[1].Value = dgvr.Attribute("week").Value;
+
+                    dataGridViewX1.Rows.Add(dr);
+                }
+
+            }
+
+            //dateTimeInput1.Value = DateTime.Today;
+            //dateTimeInput2.Value = DateTime.Today.AddDays(7);
         }
 
         private void btnStart_Click(object sender, EventArgs e)
@@ -90,17 +183,46 @@ namespace MOD_Club_Acrossdivisions
             {
                 MsgBox.Show("系統忙碌中...請稍後!!");
             }
+
+            // 儲存日期設定
+            // 讀取日期清單資料
+            string node = "";
+            foreach (DataGridViewRow dr in dataGridViewX1.Rows)
+            {
+                node += "<Dgv date = \"" + dr.Cells["Column1"].Value + "\" week = \"" + dr.Cells["column2"].Value + "\"></Dgv>";
+            }
+
+            string settingData = string.Format(@"<DateSetting><Weeks><Week name = ""Monday"" checked = ""{0}""/><Week name = ""Tuesday"" checked = ""{1}"" /><Week name = ""Wednesday"" checked = ""{2}"" /><Week name = ""Thursday"" checked = ""{3}"" /><Week name = ""Friday"" checked = ""{4}"" /><Week name = ""Saturday"" checked = ""{5}"" /><Week name = ""Sunday"" checked = ""{6}"" /></Weeks><StarDate Date = ""{7}"" ></StarDate><EndDate Date = ""{8}"" ></EndDate><DataGridView>{9}</DataGridView></DateSetting>"
+            , cbDay1.Checked, cbDay2.Checked, cbDay3.Checked, cbDay4.Checked, cbDay5.Checked,cbDay6.Checked,cbDay7.Checked, dateTimeInput1.Value, dateTimeInput2.Value, node);
+
+            DateSetting["DateSetting"] = settingData;
+            DateSetting.Save();
         }
 
         void BGW_DoWork(object sender, DoWorkEventArgs e)
         {
             //開始列印學生清單
-
-
             #region 資料整理
 
             //取得需連線學校
             LoginSchoolList = tool._A.Select<LoginSchool>();
+
+            // 2018/01/23 羿均 新增 取得學校相關資料
+            SchoolClubDic = tool.SchoolClubDetail(LoginSchoolList);
+
+            foreach (AcrossRecord Across in SchoolClubDic.Values)
+            {
+                foreach (OnlineClub club in Across.ClubDic.Values)
+                {
+                    if (!Mergerdic.ContainsKey(club.ClubName))
+                    {
+                        OnlineMergerClub Mclub = new OnlineMergerClub(tool.Point);
+                        Mergerdic.Add(club.ClubName, Mclub);
+                        Mclub.AddClub(club);
+                    }
+                    Mergerdic[club.ClubName].AddClub(club);
+                }
+            }
 
             //選擇了哪些社團(使用名稱進行比對)
             List<string> ClubIDList = K12.Club.Volunteer.ClubAdmin.Instance.SelectedSource;
@@ -118,6 +240,7 @@ namespace MOD_Club_Acrossdivisions
             List<string> ClubNewNameList = new List<string>();
             foreach (LoginSchool school in LoginSchoolList)
             {
+                schoolMark = school.Remark;
                 Connection me = new Connection();
                 me.Connect(school.School_Name, tool._contract, FISCA.Authentication.DSAServices.PassportToken);
                 Dictionary<string, OnlineSCJoin> ScjList = RunService.GetSCJoinByClubName(me, ClubNameList);
@@ -130,7 +253,11 @@ namespace MOD_Club_Acrossdivisions
                         dic.Add(name, new List<OnlineSCJoin>());
                         ClubNewNameList.Add(name);
                     }
+                    // 2018/01/23 羿均 新增部別欄位
+                    each.SchoolReMark = school.Remark;
+
                     dic[name].Add(each);
+                    
                 }
             }
 
@@ -147,7 +274,7 @@ namespace MOD_Club_Acrossdivisions
             {
                 //如果範本為空,則建立一個預設範本
                 Campus.Report.ReportConfiguration ConfigurationInCadre_1 = new Campus.Report.ReportConfiguration(ConfigName);
-                ConfigurationInCadre_1.Template = new Campus.Report.ReportTemplate(Properties.Resources.班級點名單_週報表樣式範本, Campus.Report.TemplateType.Word);
+                ConfigurationInCadre_1.Template = new Campus.Report.ReportTemplate(Properties.Resources.社團點名單_週報表樣式範本, Campus.Report.TemplateType.Word);
                 Template = ConfigurationInCadre_1.Template.ToDocument();
             }
             else
@@ -178,13 +305,22 @@ namespace MOD_Club_Acrossdivisions
                 }
             }
 
+            //K12.Club.Volunteer. crM = new SCJoinDataLoad();
+            SCJoinDataLoad scjoinData = new SCJoinDataLoad();
+
             DataTable table = new DataTable();
             table.Columns.Add("學校名稱");
             table.Columns.Add("社團名稱");
             table.Columns.Add("學年度");
             table.Columns.Add("學期");
 
+            table.Columns.Add("上課地點");
+            table.Columns.Add("社團類型");
+            table.Columns.Add("社團代碼");
             table.Columns.Add("社團老師");
+            table.Columns.Add("指導老師1");
+            table.Columns.Add("指導老師2");
+            table.Columns.Add("指導老師3");
 
             table.Columns.Add("列印日期");
             table.Columns.Add("上課開始");
@@ -199,6 +335,11 @@ namespace MOD_Club_Acrossdivisions
             for (int x = 1; x <= 學生多少個; x++)
             {
                 table.Columns.Add(string.Format("社團_{0}", x));
+            }
+
+            for (int x = 1; x <= 學生多少個; x++)
+            {
+                table.Columns.Add(string.Format("部別名稱_{0}", x));
             }
 
             for (int x = 1; x <= 學生多少個; x++)
@@ -227,6 +368,12 @@ namespace MOD_Club_Acrossdivisions
             }
 
             #endregion
+            // K12.Club.Volunteer.Report.SCJoinDataLoad scj = new K12.Club.Volunteer.Report.SCJoinDataLoad();
+            foreach (string each in scjoinData.CLUBRecordDic.Keys)
+            {
+                //社團資料
+                CLUBRecord cr = scjoinData.CLUBRecordDic[each];
+            }
 
             foreach (string each in ClubNewNameList)
             {
@@ -235,10 +382,15 @@ namespace MOD_Club_Acrossdivisions
                 row["學校名稱"] = K12.Data.School.ChineseName;
                 row["學年度"] = School.DefaultSchoolYear;
                 row["學期"] = School.DefaultSemester;
+
                 row["列印日期"] = DateTime.Today.ToShortDateString();
                 row["上課開始"] = config[0];
                 row["上課結束"] = config[config.Count - 1];
                 row["社團名稱"] = each;
+                // 2018/01/23 羿均 新增合併欄位:
+                row["上課地點"] = Mergerdic[each].Location;
+                row["社團類型"] = Mergerdic[each].ClubCategory;
+                row["社團代碼"] = Mergerdic[each].ClubNumber;
 
                 //特殊
                 if (dic[each].Count > 0)
@@ -255,6 +407,7 @@ namespace MOD_Club_Acrossdivisions
                 {
                     if (y <= 學生多少個)
                     {
+                        row[string.Format("部別名稱_{0}", y)] = scjoin.SchoolReMark;
                         row[string.Format("班級_{0}", y)] = scjoin.ClassName;
                         row[string.Format("座號_{0}", y)] = scjoin.SeatNo;
                         row[string.Format("姓名_{0}", y)] = scjoin.StudentName;
@@ -352,16 +505,16 @@ namespace MOD_Club_Acrossdivisions
             //畫面內容(範本內容,預設樣式
             if (ConfigurationInCadre.Template != null)
             {
-                TemplateForm = new Campus.Report.TemplateSettingForm(ConfigurationInCadre.Template, new Campus.Report.ReportTemplate(Properties.Resources.班級點名單_週報表樣式範本, Campus.Report.TemplateType.Word));
+                TemplateForm = new Campus.Report.TemplateSettingForm(ConfigurationInCadre.Template, new Campus.Report.ReportTemplate(Properties.Resources.社團點名單_週報表樣式範本, Campus.Report.TemplateType.Word));
             }
             else
             {
-                ConfigurationInCadre.Template = new Campus.Report.ReportTemplate(Properties.Resources.班級點名單_週報表樣式範本, Campus.Report.TemplateType.Word);
-                TemplateForm = new Campus.Report.TemplateSettingForm(ConfigurationInCadre.Template, new Campus.Report.ReportTemplate(Properties.Resources.班級點名單_週報表樣式範本, Campus.Report.TemplateType.Word));
+                ConfigurationInCadre.Template = new Campus.Report.ReportTemplate(Properties.Resources.社團點名單_週報表樣式範本, Campus.Report.TemplateType.Word);
+                TemplateForm = new Campus.Report.TemplateSettingForm(ConfigurationInCadre.Template, new Campus.Report.ReportTemplate(Properties.Resources.社團點名單_週報表樣式範本, Campus.Report.TemplateType.Word));
             }
 
             //預設名稱
-            TemplateForm.DefaultFileName = "班級點名單_週報表樣式範本";
+            TemplateForm.DefaultFileName = "社團點名單_週報表樣式範本";
 
             //如果回傳為OK
             if (TemplateForm.ShowDialog() == DialogResult.OK)
@@ -377,14 +530,14 @@ namespace MOD_Club_Acrossdivisions
         {
             SaveFileDialog sfd = new SaveFileDialog();
             sfd.Title = "另存新檔";
-            sfd.FileName = "班級點名表_合併欄位總表.doc";
+            sfd.FileName = "社團點名表_合併欄位總表.doc";
             sfd.Filter = "Word檔案 (*.doc)|*.doc|所有檔案 (*.*)|*.*";
             if (sfd.ShowDialog() == DialogResult.OK)
             {
                 try
                 {
                     FileStream fs = new FileStream(sfd.FileName, FileMode.Create);
-                    fs.Write(Properties.Resources.班級點名表_合併欄位總表, 0, Properties.Resources.班級點名表_合併欄位總表.Length);
+                    fs.Write(Properties.Resources.社團點名表_合併欄位總表, 0, Properties.Resources.社團點名表_合併欄位總表.Length);
                     fs.Close();
                     System.Diagnostics.Process.Start(sfd.FileName);
                 }

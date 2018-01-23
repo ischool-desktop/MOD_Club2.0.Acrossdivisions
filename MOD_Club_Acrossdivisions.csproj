@@ -100,8 +100,9 @@
       <HintPath>Library\FISCA.UDT.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="K12.Club.Volunteer">
-      <HintPath>..\..\ischool高中\addmodules\MOD_Club.Volunteer\K12.Club.Volunteer.dll</HintPath>
+    <Reference Include="K12.Club.Volunteer, Version=1.0.5.7, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Library\K12.Club.Volunteer.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="K12.Data, Version=2.0.0.2, Culture=neutral, processorArchitecture=MSIL">
@@ -169,6 +170,12 @@
     </Compile>
     <Compile Include="Ribbon\EnglishTableForm.Designer.cs">
       <DependentUpon>EnglishTableForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ribbon\ExportAcrossDataForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Ribbon\ExportAcrossDataForm.Designer.cs">
+      <DependentUpon>ExportAcrossDataForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Ribbon\SocietiesOverviewTable.cs">
       <SubType>Form</SubType>
@@ -247,6 +254,7 @@
     <Content Include="Library\FISCA.UDT.pdb" />
     <Content Include="Library\FISCA.UDT.xml" />
     <Content Include="Library\K12.Club.Volunteer.dll" />
+    <Content Include="Library\K12.Club.Volunteer.pdb" />
     <Content Include="Library\K12.Data.dll" />
     <Content Include="Library\K12.Data.pdb" />
     <Content Include="Library\K12.Data.xml" />
@@ -260,8 +268,8 @@
     <None Include="Resources\asymmetric_network_64.png" />
     <None Include="Resources\flip_horizontal_64.png" />
     <None Include="Resources\匯出選社結果%28跨部別%29_範本.xlsx" />
-    <None Include="Resources\班級點名單_週報表樣式範本.doc" />
-    <None Include="Resources\班級點名表_合併欄位總表.doc" />
+    <None Include="Resources\社團點名單_週報表樣式範本.doc" />
+    <None Include="Resources\社團點名表_合併欄位總表.doc" />
     <None Include="Resources\社團參與證明單_英文_合併欄位總表.doc" />
     <None Include="Resources\社團參與證明單_英文_範本.doc" />
     <None Include="Resources\社團概況表_合併欄位總表.doc" />
@@ -274,12 +282,16 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Ribbon\ClubPointForm.resx">
       <DependentUpon>ClubPointForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Ribbon\EnglishTableForm.resx">
       <DependentUpon>EnglishTableForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ribbon\ExportAcrossDataForm.resx">
+      <DependentUpon>ExportAcrossDataForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Ribbon\VolunteerAssignment.resx">
       <DependentUpon>VolunteerAssignment.cs</DependentUpon>

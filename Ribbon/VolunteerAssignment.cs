@@ -97,6 +97,7 @@ namespace MOD_Club_Acrossdivisions
 
                 //設定目前社團人數狀況
                 SchoolClubDic[each].設定目前社團人數(MergerClubDic);
+
             }
         }
 

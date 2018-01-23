@@ -61,6 +61,11 @@ namespace MOD_Club_Acrossdivisions
         /// 社團參與記錄系統編號
         /// </summary>
         public string Uid { get; set; }
+        
+        /// <summary>
+        /// 學校部別名稱
+        /// </summary>
+        public string SchoolReMark { get; set; }
 
         /// <summary>
         /// 社團名稱
