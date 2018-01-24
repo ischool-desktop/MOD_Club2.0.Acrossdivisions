@@ -135,7 +135,7 @@ namespace MOD_Club_Acrossdivisions
                 }
 
             }
-
+            
             //dateTimeInput1.Value = DateTime.Today;
             //dateTimeInput2.Value = DateTime.Today.AddDays(7);
         }
@@ -207,6 +207,9 @@ namespace MOD_Club_Acrossdivisions
             //取得需連線學校
             LoginSchoolList = tool._A.Select<LoginSchool>();
 
+            // 取得社團老師資料 key : DSNS
+            Dictionary<string, ClubTeacher> clubTeacherDic = new Dictionary<string, ClubTeacher>();
+
             // 2018/01/23 羿均 新增 取得學校相關資料
             SchoolClubDic = tool.SchoolClubDetail(LoginSchoolList);
 
@@ -244,9 +247,24 @@ namespace MOD_Club_Acrossdivisions
                 Connection me = new Connection();
                 me.Connect(school.School_Name, tool._contract, FISCA.Authentication.DSAServices.PassportToken);
                 Dictionary<string, OnlineSCJoin> ScjList = RunService.GetSCJoinByClubName(me, ClubNameList);
-
+                
                 foreach (OnlineSCJoin each in ScjList.Values)
                 {
+                    // 2018/01/24 羿均 紀錄:主要連線學校社團老師
+                    if (school.School_Name == tool.Point)
+                    {
+                        if (!clubTeacherDic.ContainsKey(school.School_Name))
+                        {
+                            ClubTeacher ct = new ClubTeacher();
+                            ct.SchoolName = school.School_Name;
+                            ct.Teacher1 = each.TeacherName;
+                            ct.Teacher2 = each.TeacherName2;
+                            ct.Teacher3 = each.TeacherName3;
+
+                            clubTeacherDic.Add(school.School_Name, ct);
+                        }
+                    }
+                    
                     string name = each.ClubName;
                     if (!dic.ContainsKey(name))
                     {
@@ -305,7 +323,7 @@ namespace MOD_Club_Acrossdivisions
                 }
             }
 
-            //K12.Club.Volunteer. crM = new SCJoinDataLoad();
+            
             SCJoinDataLoad scjoinData = new SCJoinDataLoad();
 
             DataTable table = new DataTable();
@@ -317,10 +335,10 @@ namespace MOD_Club_Acrossdivisions
             table.Columns.Add("上課地點");
             table.Columns.Add("社團類型");
             table.Columns.Add("社團代碼");
-            table.Columns.Add("社團老師");
-            table.Columns.Add("指導老師1");
-            table.Columns.Add("指導老師2");
-            table.Columns.Add("指導老師3");
+            //table.Columns.Add("社團老師");
+            table.Columns.Add("社團老師1");
+            table.Columns.Add("社團老師2");
+            table.Columns.Add("社團老師3");
 
             table.Columns.Add("列印日期");
             table.Columns.Add("上課開始");
@@ -368,7 +386,7 @@ namespace MOD_Club_Acrossdivisions
             }
 
             #endregion
-            // K12.Club.Volunteer.Report.SCJoinDataLoad scj = new K12.Club.Volunteer.Report.SCJoinDataLoad();
+            
             foreach (string each in scjoinData.CLUBRecordDic.Keys)
             {
                 //社團資料
@@ -392,9 +410,12 @@ namespace MOD_Club_Acrossdivisions
                 row["社團類型"] = Mergerdic[each].ClubCategory;
                 row["社團代碼"] = Mergerdic[each].ClubNumber;
 
+                row["社團老師1"] = clubTeacherDic[tool.Point].Teacher1;
+                row["社團老師2"] = clubTeacherDic[tool.Point].Teacher2;
+                row["社團老師3"] = clubTeacherDic[tool.Point].Teacher3;
                 //特殊
-                if (dic[each].Count > 0)
-                    row["社團老師"] = dic[each][0].TeacherName;
+                //if (dic[each].Count > 0)
+                //row["社團老師"] = dic[each][0].TeacherName;
 
                 for (int x = 1; x <= config.Count; x++)
                 {
@@ -608,5 +629,15 @@ namespace MOD_Club_Acrossdivisions
         {
             dataGridViewX1.Rows.Clear();
         }
+    }
+
+    // 2018/01/24 羿均 新增 儲存 _.GetStudentSCJoin service資料
+    public class ClubTeacher
+    {
+        public string SchoolName;
+        public string ClubName;
+        public string Teacher1;
+        public string Teacher2;
+        public string Teacher3;
     }
 }

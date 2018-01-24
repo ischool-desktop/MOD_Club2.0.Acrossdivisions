@@ -34,6 +34,12 @@ namespace MOD_Club_Acrossdivisions
             if (club.Element("TeacherName") != null)
                 TeacherName = club.Element("TeacherName").Value;
 
+            if (club.Element("TeacherName2") != null)
+                TeacherName2 = club.Element("TeacherName2").Value;
+
+            if (club.Element("TeacherName3") != null)
+                TeacherName3 = club.Element("TeacherName3").Value;
+
             if (club.Element("ClassName") != null)
                 ClassName = club.Element("ClassName").Value;
 
@@ -78,9 +84,19 @@ namespace MOD_Club_Acrossdivisions
         public string ClubNumber { get; set; }
 
         /// <summary>
-        /// 老師姓名
+        /// 老師姓名1
         /// </summary>
         public string TeacherName { get; set; }
+        
+        /// <summary>
+        /// 老師姓名2
+        /// </summary>
+        public string TeacherName2 { get; set; }
+ 
+        /// <summary>
+        /// 老師姓名3
+        /// </summary>
+        public string TeacherName3 { get; set; }
 
         /// <summary>
         /// 班級名稱
